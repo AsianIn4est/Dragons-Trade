@@ -10,7 +10,7 @@ local os = require("os")
 local mode = ""
 local gpu
 local component = require("component")
-
+local terminal = require("term")
 
 
 
@@ -130,10 +130,10 @@ function mode_gui()
             end
 
             b.cords.x = buttons_cfg.sX
-            b.cords.y = buttons_cfg.sY + ((k-1)*buttons_cfg.H)
+            b.cords.y = buttons_cfg.sY + buttons_cfg.H * (k-1) + buttons_cfg.SP * (k-1)
             b.cords.x2 = buttons_cfg.sX + buttons_cfg.W
-            -- спейсик между кнопочками )))
-            if k > 1 then b.cords.y2 = b.cords.y2 + buttons_cfg.SP end
+            b.cords.y2 = b.cords.y2 + buttons_cfg.H
+                       
             gpu.fill(b.cords.x, b.cords.y, buttons_cfg.W, buttons_cfg.H, " ")
             gpu.set(b.cords.x + 2, b.cords.y+buttons_cfg.H/2, b.label)
             gpu.setBackground(oldb)
@@ -154,7 +154,13 @@ end
 
 function clear_gui()
 -- очистка экрана
+    --color reset
+    gpu.setBackground(0x000000)
+    gpu.setForeground(0xFFFFFF)
+    -- заполняем пустотой весь экран
     gpu.fill(1,1, cfg.max_x, cfg.max_y, " ")
+    -- курсор в начало
+    terminal.setCursor(1, 1)
 end
 
 
@@ -196,9 +202,10 @@ if type(args) == "string" then
             end
     elseif mode == "server" then
         -- режим сервака
-    elseif mode == "unit" then
-        -- режим разработчика
-        debug = true
+    elseif mode == "cls" or mode == "clear" then
+        -- чистим экран
+        init_gui(); clear_gui();
+        os.exit();
     else
         print("Bad argument. Usage dt type (gui or server)")
         os.exit()
@@ -225,4 +232,4 @@ end
 
 
 
---228
+--228 - недавно эта строчка была 228-ой
