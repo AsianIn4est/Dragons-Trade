@@ -214,7 +214,7 @@ end
 
 function btn_login_onClick()
     if last_click.p == "Asian_In4est" then user.perm = "ADMIN" end
-    alert("Информация", "Лол кек! "..last_click.p.." привет. Авторизация прошла успешно.")
+    alert("Привет "..last_click.p, "Лол кек! Здарова.")
     user.nick = last_click.p
     user.perm = "USER"
 end
@@ -233,6 +233,11 @@ end
 
 function btn_admin_onClick()
 
+end
+
+function btn_logout_onClick()
+    user = nil
+    user.perm = "NOLOGIN"
 end
 
 
