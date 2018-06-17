@@ -135,7 +135,7 @@ function mode_gui()
             local oldb, oldf = gpu.getBackground(), gpu.getForeground()
             -- рисуем наши кнопочки
             if b.perm == "NOLOGIN" then b.enable = (user.perm == "NOLOGIN") end;
-            if b.perm == "USER" then b.enable = (user.perm == "USER") end;
+            if b.perm == "USER" then b.enable = (user.perm == "USER" or user.perm == "ADMIN") end;
             if b.perm == "ADMIN" then b.enable = (user.perm == "ADMIN") end;
 
             if b.enable then
@@ -173,6 +173,9 @@ function event_gui()
     last_click.y = cy
     last_click.b = cb
     last_click.p = cb
+    -- если кликнул другой хрен, разлогиниваем
+    if cp ~= user.nick then user.perm = "NOLOGIN" end;
+
     for k, btn in pairs(buttons) do
         if btn.enable and -- проверим что кнопка активна
             last_click.x >= btn.cords.x and  -- сверим координаты
@@ -210,7 +213,10 @@ function alert(label, text)
 end
 
 function btn_login_onClick()
-    alert("debug", "login click")
+    if last_click.p == "Asian_In4est" then user.perm = "ADMIN" end
+    alert("Информация", "Лол кек! "..last_click.p.." привет. Авторизация прошла успешно.")
+    user.nick = last_click.p
+    user.perm = "USER"
 end
 
 function btn_sell_onClick()
