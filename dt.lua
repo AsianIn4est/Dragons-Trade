@@ -183,7 +183,7 @@ function event_gui()
 
     
     -- если кликнул другой хрен, разлогиниваем
-    if cp ~= user.nick and user.nick ~= "" then  
+    if last_click.p ~= user.nick and user.nick ~= "" then  
         log({"user_force_logout", user.nick, ep})
         btn_logout_onClick();
     end;
