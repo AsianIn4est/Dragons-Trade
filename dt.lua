@@ -36,7 +36,7 @@ local cfg = {
     max_y = 0,
     alert_x = 50,
     alert_y = 20,
-    log_path = "log",
+    log_path = "/home/log",
 }
 
 cfg.alert_w = (100 - cfg.alert_x)
@@ -175,14 +175,18 @@ end
 
 function event_gui()
 -- обрабатываем события
-    local a, b, c ,d ,e , f = event.pull("touch")
+    local ev, _, ex, ey, eb, ep = event.pull("touch")
+    last_click.x = ex
+    last_click.y = ey
+    last_click.b = eb
+    last_click.p = ep
+
     
-    last_click.x = c
-    last_click.y = d
-    last_click.b = e
-    last_click.p = f
     -- если кликнул другой хрен, разлогиниваем
-    if cp ~= user.nick then btn_logout_onClick(); return; end;
+    if cp ~= user.nick then  
+        log({"user_force_logout", user.nick, ep})
+        btn_logout_onClick();
+    end;
 
     for k, btn in pairs(buttons) do
         if btn.enable and -- проверим что кнопка активна
@@ -194,7 +198,7 @@ function event_gui()
             btn.call() -- калбэк
         end
     end
-    log({a, b, c ,d ,e , f})
+    
 end
 
 
@@ -232,7 +236,7 @@ function btn_login_onClick()
             break
         end
     end
-    
+    log({"user_login", user.nick, user.perm})
 end
 
 function btn_sell_onClick()
