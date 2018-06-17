@@ -175,12 +175,12 @@ end
 
 function event_gui()
 -- обрабатываем события
-    local EP = event.pull("touch")
-    log(EP)
-    last_click.x = EP[3]
-    last_click.y = EP[4]
-    last_click.b = EP[5]
-    last_click.p = EP[6]
+    local ee, e2e, a, b, c, d = event.pull("touch")
+    log({ee, e2e, a, b, c, d})
+    last_click.x = a
+    last_click.y = b
+    last_click.b = c
+    last_click.p = d
     -- если кликнул другой хрен, разлогиниваем
     if cp ~= user.nick then btn_logout_onClick(); return; end;
 
