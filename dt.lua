@@ -117,6 +117,8 @@ local user = {
     perm = "NOLOGIN",
     nick = ""
 }
+
+local admins = {"Asian_In4est"}
 ----------------------------------------------------------------
 --  GUI 
 ----------------------------------------------------------------
@@ -176,7 +178,7 @@ function event_gui()
     last_click.b = cb
     last_click.p = cp
     -- если кликнул другой хрен, разлогиниваем
-    if cp ~= user.nick then user.perm = "NOLOGIN" end;
+    if cp ~= user.nick then btn_logout_onClick() end;
 
     for k, btn in pairs(buttons) do
         if btn.enable and -- проверим что кнопка активна
@@ -219,6 +221,13 @@ function btn_login_onClick()
     alert("Привет "..last_click.p, "Лол кек! Здарова.")
     user.nick = last_click.p
     user.perm = "USER"
+    for u in #admins do
+        if u == user.nick then
+            user.perm = "ADMIN"
+            break
+        end
+    end
+    os.sleep(2)
 end
 
 function btn_sell_onClick()
