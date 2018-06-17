@@ -7,12 +7,14 @@ autor: Asian_In4est
 ----------------------------------------------------------------------------------------------------
 local args = ...
 local os = require("os")
+local io = require("io")
 local mode = ""
 local gpu
 local component = require("component")
 local terminal = require("term")
 local event = require("event")
 local sides = require("sides")
+local serialization = require("serialization")
 local colors = {
     top_bar_bg = 0x3e1919,
     top_bar_t = 0xFFFFFF,
@@ -34,6 +36,7 @@ local cfg = {
     max_y = 0,
     alert_x = 50,
     alert_y = 20,
+    log_path = "log",
 }
 
 cfg.alert_w = (100 - cfg.alert_x)
@@ -172,13 +175,14 @@ end
 
 function event_gui()
 -- обрабатываем события
-    local _, _, cx, cy, cb, cp = event.pull("touch")
-    last_click.x = cx
-    last_click.y = cy
-    last_click.b = cb
-    last_click.p = cp
+    local EP = event.pull("touch")
+    log(EP)
+    last_click.x = EP[3]
+    last_click.y = EP[4]
+    last_click.b = EP[5]
+    last_click.p = EP[6]
     -- если кликнул другой хрен, разлогиниваем
-    if cp ~= user.nick then btn_logout_onClick() end;
+    if cp ~= user.nick then btn_logout_onClick(); return; end;
 
     for k, btn in pairs(buttons) do
         if btn.enable and -- проверим что кнопка активна
@@ -251,7 +255,16 @@ function btn_logout_onClick()
     user.perm = "NOLOGIN"
 end
 
-
+function log(t)
+    if type(t) ~= "table" then return false end;
+    file = io.open(cfg.log_path, "r")
+    data = file:read("a*"); file:close();
+    data = serialization.unserialize(data)
+    table.insert(data, t)
+    data = serialization.serialize(data)
+    file = io.open(cfg.log_path, "w")
+    file:write(data); file:close();
+end
 ----------------------------------------------------------------------------------------------------
 
 
