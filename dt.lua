@@ -238,7 +238,7 @@ function btn_admin_onClick()
 end
 
 function btn_logout_onClick()
-    user.nick = nil
+    user.nick = ""
     user.perm = "NOLOGIN"
 end
 
