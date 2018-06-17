@@ -183,7 +183,7 @@ function event_gui()
 
     
     -- если кликнул другой хрен, разлогиниваем
-    if cp ~= user.nick then  
+    if cp ~= user.nick and user.nick ~= "" then  
         log({"user_force_logout", user.nick, ep})
         btn_logout_onClick();
     end;
@@ -226,7 +226,7 @@ function alert(label, text)
 end
 
 function btn_login_onClick()
-    if last_click.p == "Asian_In4est" then user.perm = "ADMIN" end
+    
     alert("Привет "..last_click.p, "Лол кек! Здарова.")
     user.nick = last_click.p
     user.perm = "USER"
@@ -263,8 +263,12 @@ end
 function log(t)
     if type(t) ~= "table" then return false end;
     file = io.open(cfg.log_path, "r")
-    data = file:read("a*"); file:close();
-    data = serialization.unserialize(data)
+    if file ~= nil then
+        data = file:read("a*"); file:close();
+        data = serialization.unserialize(data)
+    else
+        data = {}
+    end
     table.insert(data, t)
     data = serialization.serialize(data)
     file = io.open(cfg.log_path, "w")
