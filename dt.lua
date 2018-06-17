@@ -22,7 +22,7 @@ local colors = {
     btn_disabled_t = 0x151515, -- почти блэк)
     alert_bar_t = 0xFFFFFF,
     alert_body_bg = 0xBADBAD,
-    alert_body_t = 0xABDABD
+    alert_body_t = 0xC60000
 }
     colors.alert_bar_bg = colors.top_bar_bg
 local cfg = {
@@ -62,7 +62,7 @@ local buttons = {
         --     фон: ВКЛ       ВЫКЛ      ВКЛ      ВЫКЛ     
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         -- обработчик кликов
-        call = btn_login_onClick,
+        call = function () btn_login_onClick() end,
         -- права доступа
         perm = "NOLOGIN",
         enable = true
@@ -72,7 +72,7 @@ local buttons = {
         label = "Продать",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = btn_sell_onClick,
+        call = function () btn_sell_onClick end,
         perm = "USER",
         enable = false
     },  
@@ -81,7 +81,7 @@ local buttons = {
         label = "Купить",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = btn_sell_onClick,
+        call = function () btn_sell_onClick end,
         perm = "USER",        
         enable = false
     }, 
@@ -90,7 +90,7 @@ local buttons = {
         label = "Личный кабинет",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = btn_sell_onClick,
+        call = function () btn_sell_onClick end,
         perm = "USER",
         enable = false
     },
@@ -99,7 +99,7 @@ local buttons = {
         label = "Админка",
         cords = {}, 
          colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = btn_admin_onClick,
+        call = function () btn_admin_onClick end,
         perm = "ADMIN",
         enable = false
     },
@@ -108,13 +108,16 @@ local buttons = {
         label = "Выход",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = btn_logout_onClick,
+        call = function () btn_logout_onClick end,
         perm = "USER",
         enable = false
     }      
 }
 
 
+local last_click = {
+    x = 0, y = 0, b = 0, p = 0
+}
 ----------------------------------------------------------------
 --  GUI 
 ----------------------------------------------------------------
@@ -158,7 +161,7 @@ function mode_gui()
     -- отрисуем топ бар
     gpu.setBackground(colors.top_bar_bg); gpu.setForeground(colors.top_bar_t);
     gpu.fill(1, 1, cfg.max_x, 1, " ")
-    gpu.set(1, 1, cfg.my_name .. "@" .. cfg.my_ver)
+    gpu.set(3, 1, cfg.my_name .. "@" .. cfg.my_ver)
     terminal.setCursor(1, 2)
     event_gui()
 end
@@ -166,9 +169,20 @@ end
 function event_gui()
 -- обрабатываем события
     local _, _, cx, cy, cb, cp = event.pull("touch")
-    gpu.set(110, 1, "["..cx..":"..cy.."'"..cb.."] "..cp)
-    alert("test", "bla bla bal")
-    event.pull("touch")
+    last_click.x = cx
+    last_click.y = cy
+    last_click.b = cb
+    last_click.p = cb
+    for k, btn in pairs(buttons) do
+        if btn.enable and -- проверим что кнопка активна
+            last_click.x >= btn.cords.x and  -- сверим координаты
+            last_click.y >= btn.cords.y and 
+            last_click.x <= btn.cords.x2 and 
+            last_click.y <= btn.cords.y2 then
+
+            btn.call() -- калбэк
+        end
+    end
 end
 
 
@@ -192,10 +206,11 @@ function alert(label, text)
     gpu.setForeground(colors.alert_body_t)
     gpu.fill(cfg.alert_x, cfg.alert_y + 1, cfg.alert_w, cfg.alert_h, " ")
     gpu.set(cfg.alert_x + 2, cfg.alert_y + cfg.alert_h / 2, text)
+    event.pull("touch")
 end
 
 function btn_login_onClick()
-
+    alert("debug", "login click")
 end
 
 function btn_sell_onClick()
