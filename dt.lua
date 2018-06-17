@@ -114,7 +114,7 @@ local last_click = {
 }
 
 local user = {
-    perm = "NOLOGIN"
+    perm = "NOLOGIN",
     nick = ""
 }
 ----------------------------------------------------------------
