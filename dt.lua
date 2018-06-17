@@ -227,7 +227,7 @@ function btn_login_onClick()
             break
         end
     end
-    os.sleep(2)
+    
 end
 
 function btn_sell_onClick()
