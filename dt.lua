@@ -65,7 +65,6 @@ local buttons = {
         call = function () btn_login_onClick() end,
         -- права доступа
         perm = "NOLOGIN",
-        enable = true
     },
     {
         name = "btn_sell", 
@@ -74,7 +73,6 @@ local buttons = {
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = function () btn_sell_onClick() end,
         perm = "USER",
-        enable = false
     },  
     {
         name = "btn_buy", 
@@ -83,7 +81,6 @@ local buttons = {
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = function () btn_sell_onClick() end,
         perm = "USER",        
-        enable = false
     }, 
     {
         name = "btn_lk", 
@@ -92,7 +89,6 @@ local buttons = {
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = function () btn_sell_onClick() end,
         perm = "USER",
-        enable = false
     },
     {
         name = "btn_admin", 
@@ -101,7 +97,6 @@ local buttons = {
          colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = function () btn_admin_onClick() end,
         perm = "ADMIN",
-        enable = false
     },
     {
         name = "btn_logout", 
@@ -110,13 +105,16 @@ local buttons = {
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = function () btn_logout_onClick() end,
         perm = "USER",
-        enable = false
     }      
 }
 
 
 local last_click = {
     x = 0, y = 0, b = 0, p = 0
+}
+
+local user = {
+    perm = "NOLOGIN"
 }
 ----------------------------------------------------------------
 --  GUI 
@@ -136,6 +134,10 @@ function mode_gui()
         for k, b in pairs(buttons) do
             local oldb, oldf = gpu.getBackground(), gpu.getForeground()
             -- рисуем наши кнопочки
+            if b.perm == "NOLOGIN" then b.enable = (user.perm == "NOLOGIN") end;
+            if b.perm == "USER" then b.enable = (user.perm == "USER") end;
+            if b.perm == "ADMIN" then b.enable = (user.perm == "ADMIN") end;
+
             if b.enable then
                 gpu.setBackground(b.colors[1])
                 gpu.setForeground(b.colors[3])
@@ -153,8 +155,6 @@ function mode_gui()
             gpu.set(b.cords.x + 2, b.cords.y+buttons_cfg.H/2, b.label)
             gpu.setBackground(oldb)
             gpu.setForeground(oldf)
-
-            print("{"..k.."} " .. b.name .. ">>" .. b.perm)
         end
 
     end
