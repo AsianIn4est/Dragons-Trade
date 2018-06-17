@@ -19,17 +19,26 @@ local colors = {
     btn_active_bg = 0x2A64B8, -- синий
     btn_active_t = 0xd4e0f0, -- светлосиний
     btn_disabled_bg = 0x939899, --серый
-    btn_disabled_t = 0x151515 -- почти блэк)
+    btn_disabled_t = 0x151515, -- почти блэк)
+    alert_bar_t = 0xFFFFFF,
+    alert_body_bg = 0xBADBAD,
+    alert_body_t = 0xABDABD
 }
-
+    colors.alert_bar_bg = colors.top_bar_bg
 local cfg = {
     my_name = "Dragons Trade",
     my_ver = "0.0.0",
     gui_sleep = 0.1, -- задержка в оконной функции
     dev = true, -- флаг вывода дополнительной инфы
     max_x = 0,
-    max_y = 0
+    max_y = 0,
+    alert_x = 50,
+    alert_y = 20,
 }
+
+cfg.alert_w = (100 - cfg.alert_x)
+cfg.alert_h = (30 - cfg.alert_y)
+
 ----------------------------------------------------------------------------------------------------
 -- кнопки для главного экрана
 local buttons_cfg = {
@@ -158,6 +167,8 @@ function event_gui()
 -- обрабатываем события
     local _, _, cx, cy, cb, cp = event.pull("touch")
     gpu.set(110, 1, "["..cx..":"..cy.."'"..cb.."] "..cp)
+    alert("test", "bla bla bal")
+    event.pull("touch")
 end
 
 
@@ -172,6 +183,16 @@ function clear_gui()
     terminal.setCursor(1, 1)
 end
 
+function alert(label, text)
+    gpu.setBackground(colors.alert_bar_bg)
+    gpu.setForeground(colors.alert_bar_t)
+    gpu.fill(cfg.alert_x, cfg.alert_y, cfg.alert_w, cfg.alert_h, " ")
+    gpu.set(cfg.alert_x + 2, cfg.alert_y, label)
+    gpu.setBackground(colors.alert_body_bg)
+    gpu.setForeground(colors.alert_body_t)
+    gpu.fill(cfg.alert_x, cfg.alert_y + 1, cfg.alert_w, cfg.alert_h, " ")
+    gpu.set(cfg.alert_x + 2, cfg.alert_y + cfg.alert_h / 2, text)
+end
 
 function btn_login_onClick()
 
