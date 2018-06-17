@@ -72,7 +72,7 @@ local buttons = {
         label = "Продать",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = function () btn_sell_onClick end,
+        call = function () btn_sell_onClick() end,
         perm = "USER",
         enable = false
     },  
@@ -81,7 +81,7 @@ local buttons = {
         label = "Купить",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = function () btn_sell_onClick end,
+        call = function () btn_sell_onClick() end,
         perm = "USER",        
         enable = false
     }, 
@@ -90,7 +90,7 @@ local buttons = {
         label = "Личный кабинет",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = function () btn_sell_onClick end,
+        call = function () btn_sell_onClick() end,
         perm = "USER",
         enable = false
     },
@@ -99,7 +99,7 @@ local buttons = {
         label = "Админка",
         cords = {}, 
          colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = function () btn_admin_onClick end,
+        call = function () btn_admin_onClick() end,
         perm = "ADMIN",
         enable = false
     },
@@ -108,7 +108,7 @@ local buttons = {
         label = "Выход",
         cords = {}, 
         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
-        call = function () btn_logout_onClick end,
+        call = function () btn_logout_onClick() end,
         perm = "USER",
         enable = false
     }      
@@ -230,6 +230,7 @@ function btn_admin_onClick()
 end
 
 
+----------------------------------------------------------------------------------------------------
 
 
 ----------------------------------------------------------------------------------------------------
