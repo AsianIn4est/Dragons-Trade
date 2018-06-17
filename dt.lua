@@ -175,12 +175,12 @@ end
 
 function event_gui()
 -- обрабатываем события
-    local ee, e2e, a, b, c, d = event.pull("touch")
-    log({ee, e2e, a, b, c, d})
-    last_click.x = a
-    last_click.y = b
-    last_click.b = c
-    last_click.p = d
+    local a, b, c ,d ,e , f = event.pull("touch")
+    
+    last_click.x = c
+    last_click.y = d
+    last_click.b = e
+    last_click.p = f
     -- если кликнул другой хрен, разлогиниваем
     if cp ~= user.nick then btn_logout_onClick(); return; end;
 
@@ -194,6 +194,7 @@ function event_gui()
             btn.call() -- калбэк
         end
     end
+    log({a, b, c ,d ,e , f})
 end
 
 
