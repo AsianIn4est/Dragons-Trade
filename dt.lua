@@ -172,7 +172,7 @@ function event_gui()
     last_click.x = cx
     last_click.y = cy
     last_click.b = cb
-    last_click.p = cb
+    last_click.p = cp
     -- если кликнул другой хрен, разлогиниваем
     if cp ~= user.nick then user.perm = "NOLOGIN" end;
 
