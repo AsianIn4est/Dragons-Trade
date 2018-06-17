@@ -11,26 +11,20 @@ local mode = ""
 local gpu
 local component = require("component")
 local terminal = require("term")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 local event = require("event")
 local sides = require("sides")
-local colors
+local colors = {
+    top_bar_bg = 0x3e1919,
+    top_bar_t = 0xFFFFFF,
+    btn_active_bg = 0x2A64B8, -- синий
+    btn_active_t = 0xd4e0f0, -- светлосиний
+    btn_disabled_bg = 0x939899, --серый
+    btn_disabled_t = 0x151515 -- почти блэк)
+}
+
 local cfg = {
+    my_name = "Dragons Trade",
+    my_ver = "0.0.0",
     gui_sleep = 0.1, -- задержка в оконной функции
     dev = true, -- флаг вывода дополнительной инфы
     max_x = 0,
@@ -39,9 +33,9 @@ local cfg = {
 ----------------------------------------------------------------------------------------------------
 -- кнопки для главного экрана
 local buttons_cfg = {
-    sX = 110,
-    sY = 6,
-    W = 40,
+    sX = 125,
+    sY = 3,
+    W = 35,
     H = 6,
     SP = 2 -- space между кнопками
 }
@@ -57,7 +51,7 @@ local buttons = {
         label = "Логин",
         cords = {}, 
         --     фон: ВКЛ       ВЫКЛ      ВКЛ      ВЫКЛ     
-        colors = {0xFFDEAD, 0xFFF8DC, 0x000000, 0x000000},
+        colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         -- обработчик кликов
         call = btn_login_onClick,
         -- права доступа
@@ -68,38 +62,47 @@ local buttons = {
         name = "btn_sell", 
         label = "Продать",
         cords = {}, 
-        colors = {0xFFDEAD, 0xFFF8DC, 0x000000, 0x000000},
+        colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = btn_sell_onClick,
         perm = "USER",
-        enable = true,
+        enable = false
     },  
     {
         name = "btn_buy", 
         label = "Купить",
         cords = {}, 
-        colors = {0xFFDEAD, 0xFFF8DC, 0x000000, 0x000000},
+        colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = btn_sell_onClick,
         perm = "USER",        
-        enable = true
+        enable = false
     }, 
     {
         name = "btn_lk", 
         label = "Личный кабинет",
         cords = {}, 
-        colors = {0xFFDEAD, 0xFFF8DC, 0x000000, 0x000000},
+        colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = btn_sell_onClick,
         perm = "USER",
-        enable = true
+        enable = false
     },
     {
         name = "btn_admin", 
         label = "Админка",
         cords = {}, 
-        colors = {0xFFDEAD, 0xFFF8DC, 0x000000, 0x000000},
+         colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
         call = btn_admin_onClick,
         perm = "ADMIN",
         enable = false
-    }   
+    },
+    {
+        name = "btn_logout", 
+        label = "Выход",
+        cords = {}, 
+        colors = {colors.btn_active_bg, colors.btn_disabled_bg, colors.btn_active_t, colors.btn_disabled_t},
+        call = btn_logout_onClick,
+        perm = "USER",
+        enable = false
+    }      
 }
 
 
@@ -132,7 +135,7 @@ function mode_gui()
             b.cords.x = buttons_cfg.sX
             b.cords.y = buttons_cfg.sY + buttons_cfg.H * (k-1) + buttons_cfg.SP * (k-1)
             b.cords.x2 = buttons_cfg.sX + buttons_cfg.W
-            b.cords.y2 = b.cords.y2 + buttons_cfg.H
+            b.cords.y2 = b.cords.y + buttons_cfg.H
                        
             gpu.fill(b.cords.x, b.cords.y, buttons_cfg.W, buttons_cfg.H, " ")
             gpu.set(b.cords.x + 2, b.cords.y+buttons_cfg.H/2, b.label)
@@ -143,12 +146,18 @@ function mode_gui()
         end
 
     end
+    -- отрисуем топ бар
+    gpu.setBackground(colors.top_bar_bg); gpu.setForeground(colors.top_bar_t);
+    gpu.fill(1, 1, cfg.max_x, 1, " ")
+    gpu.set(1, 1, cfg.my_name .. "@" .. cfg.my_ver)
+    terminal.setCursor(1, 2)
     event_gui()
 end
 
 function event_gui()
 -- обрабатываем события
-    local _ = event.pull("touch")
+    local _, _, cx, cy, cb, cp = event.pull("touch")
+    gpu.set(110, 1, "["..cx..":"..cy.."'"..cb.."] "..cp)
 end
 
 
