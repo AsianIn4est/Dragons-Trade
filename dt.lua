@@ -10,6 +10,7 @@ local os = require("os")
 local mode = ""
 local gpu
 local component = require("component")
+
 local event = require("event")
 local sides = require("sides")
 local colors
