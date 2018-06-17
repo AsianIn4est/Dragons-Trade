@@ -27,7 +27,7 @@ local colors = {
     colors.alert_bar_bg = colors.top_bar_bg
 local cfg = {
     my_name = "Dragons Trade",
-    my_ver = "0.0.0",
+    my_ver = "0.0 alf",
     gui_sleep = 0.1, -- задержка в оконной функции
     dev = true, -- флаг вывода дополнительной инфы
     max_x = 0,
@@ -115,6 +115,7 @@ local last_click = {
 
 local user = {
     perm = "NOLOGIN"
+    nick = ""
 }
 ----------------------------------------------------------------
 --  GUI 
@@ -161,7 +162,8 @@ function mode_gui()
     -- отрисуем топ бар
     gpu.setBackground(colors.top_bar_bg); gpu.setForeground(colors.top_bar_t);
     gpu.fill(1, 1, cfg.max_x, 1, " ")
-    gpu.set(3, 1, cfg.my_name .. "@" .. cfg.my_ver)
+    gpu.set(3, 1, cfg.my_name .. " #" .. cfg.my_ver)
+    gpu.set(cfg.max_x-18, 1, user.nick)
     terminal.setCursor(1, 2)
     event_gui()
 end
