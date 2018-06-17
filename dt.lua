@@ -221,8 +221,8 @@ function btn_login_onClick()
     alert("Привет "..last_click.p, "Лол кек! Здарова.")
     user.nick = last_click.p
     user.perm = "USER"
-    for u in #admins do
-        if u == user.nick then
+    for u = 1, #admins do
+        if admins[u] == user.nick then
             user.perm = "ADMIN"
             break
         end
